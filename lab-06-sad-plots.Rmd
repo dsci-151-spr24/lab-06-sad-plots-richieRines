@@ -94,6 +94,8 @@ In other words, we will convert the data from wide format to long format.
 But before we do so, a thought exercise: *How many rows will the long-format data have?* It will have a row for each combination of year and faculty type.
 If there are 5 faculty types and 11 years of data, how many rows will we have?
 
+***We should have 55 rows***
+
 We do the wide to long conversion using a new function: `pivot_longer()`.
 The animation below show how this function works, as well as its counterpart `pivot_wider()`.
 
@@ -126,7 +128,7 @@ staff_long
 And now let's plot is as a line plot.
 A possible approach for creating a line plot where we color the lines by faculty type is the following:
 
-```{r fig.width = 10, fig.fullwidth = TRUE}
+```{r eval = FALSE, fig.width = 10, fig.fullwidth = TRUE}
 staff_long %>%
   ggplot(aes(x = year, y = value, color = faculty_type)) +
   geom_line()
@@ -136,7 +138,7 @@ But note that this results in a message as well as an unexpected plot.
 The message is saying that there is only one observation for each faculty type year combination.
 We can fix this using the `group` aesthetic following.
 
-```{r fig.width = 10, fig.fullwidth = TRUE}
+```{r eval = FALSE, fig.width = 10, fig.fullwidth = TRUE}
 staff_long %>%
   ggplot(aes(x = year, y = value, group = faculty_type, color = faculty_type)) +
   geom_line()
@@ -145,10 +147,40 @@ staff_long %>%
 1.  Include the line plot you made above in your report and make sure the figure width is large enough to make it legible.
     Also fix the title, axis labels, and legend label.
 
+```{r fig.width = 10, fig.fullwidth = TRUE}
+staff_long %>%
+  ggplot(aes(x = year, y = value, group = faculty_type, color = faculty_type)) +
+  geom_line() +
+  labs(
+       title = "Faculty Trend over Time",
+    subtitle = "1975-2011",
+       color = "",   
+           x = "",
+           y = ""
+  )
+```
+
 2.  Suppose the objective of this plot was to show that the proportion of part-time faculty have gone up over time compared to other instructional staff types.
     What changes would you propose making to this plot to tell this story and why.
+    
+***I can make the color of the focus line (Part-Time Faculty) different from the others so that it pops out at the viewer more.***
 
 3.  Implement the changes you proposed in the previous exercise.
+
+```{r}
+staff_long %>%
+  ggplot(aes(x = year, y = value, group = faculty_type, color = faculty_type)) +
+  geom_line() +
+  labs(
+       title = "Part-Time Faculty Trend (1975-2011)",
+    subtitle = "Compared to other Staff",
+       color = "",   
+           x = "",
+           y = ""
+  ) +
+  scale_color_manual(values = c(rep("gray", 4), "red"))
+
+```
 
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
